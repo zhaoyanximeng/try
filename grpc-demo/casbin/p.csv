@@ -1,0 +1,8 @@
+
+p, member, /ProdService/GetProd
+
+p, admin, /ProdService/UpdateProd
+
+g, admin, member
+g, guanliyuan, admin
+g, chengyuan, member

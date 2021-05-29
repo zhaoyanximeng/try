@@ -1,0 +1,15 @@
+syntax = "proto3";
+option go_package = "grpc-demo/src/pbfiles";
+import "validate/validate.proto";
+message ProdModel {
+  int32 id = 1;
+  string name = 2;
+}
+
+message ProdRequest {
+  int32 id = 1[(validate.rules).int32.gt = 100,(validate.rules).int32.lt = 200]; // 参数校验
+}
+
+message ProdResponse {
+  ProdModel result = 1;
+}
