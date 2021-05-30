@@ -199,3 +199,121 @@ var ProdService_ServiceDesc = grpc.ServiceDesc{
 	},
 	Metadata: "service.proto",
 }
+
+// UserServiceClient is the client API for UserService service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+type UserServiceClient interface {
+	GetUserScoreByStream(ctx context.Context, opts ...grpc.CallOption) (UserService_GetUserScoreByStreamClient, error)
+}
+
+type userServiceClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewUserServiceClient(cc grpc.ClientConnInterface) UserServiceClient {
+	return &userServiceClient{cc}
+}
+
+func (c *userServiceClient) GetUserScoreByStream(ctx context.Context, opts ...grpc.CallOption) (UserService_GetUserScoreByStreamClient, error) {
+	stream, err := c.cc.NewStream(ctx, &UserService_ServiceDesc.Streams[0], "/UserService/GetUserScoreByStream", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &userServiceGetUserScoreByStreamClient{stream}
+	return x, nil
+}
+
+type UserService_GetUserScoreByStreamClient interface {
+	Send(*UserScoreRequest) error
+	Recv() (*UserScoreResponse, error)
+	grpc.ClientStream
+}
+
+type userServiceGetUserScoreByStreamClient struct {
+	grpc.ClientStream
+}
+
+func (x *userServiceGetUserScoreByStreamClient) Send(m *UserScoreRequest) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *userServiceGetUserScoreByStreamClient) Recv() (*UserScoreResponse, error) {
+	m := new(UserScoreResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+// UserServiceServer is the server API for UserService service.
+// All implementations must embed UnimplementedUserServiceServer
+// for forward compatibility
+type UserServiceServer interface {
+	GetUserScoreByStream(UserService_GetUserScoreByStreamServer) error
+	mustEmbedUnimplementedUserServiceServer()
+}
+
+// UnimplementedUserServiceServer must be embedded to have forward compatible implementations.
+type UnimplementedUserServiceServer struct {
+}
+
+func (UnimplementedUserServiceServer) GetUserScoreByStream(UserService_GetUserScoreByStreamServer) error {
+	return status.Errorf(codes.Unimplemented, "method GetUserScoreByStream not implemented")
+}
+func (UnimplementedUserServiceServer) mustEmbedUnimplementedUserServiceServer() {}
+
+// UnsafeUserServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to UserServiceServer will
+// result in compilation errors.
+type UnsafeUserServiceServer interface {
+	mustEmbedUnimplementedUserServiceServer()
+}
+
+func RegisterUserServiceServer(s grpc.ServiceRegistrar, srv UserServiceServer) {
+	s.RegisterService(&UserService_ServiceDesc, srv)
+}
+
+func _UserService_GetUserScoreByStream_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(UserServiceServer).GetUserScoreByStream(&userServiceGetUserScoreByStreamServer{stream})
+}
+
+type UserService_GetUserScoreByStreamServer interface {
+	Send(*UserScoreResponse) error
+	Recv() (*UserScoreRequest, error)
+	grpc.ServerStream
+}
+
+type userServiceGetUserScoreByStreamServer struct {
+	grpc.ServerStream
+}
+
+func (x *userServiceGetUserScoreByStreamServer) Send(m *UserScoreResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *userServiceGetUserScoreByStreamServer) Recv() (*UserScoreRequest, error) {
+	m := new(UserScoreRequest)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+// UserService_ServiceDesc is the grpc.ServiceDesc for UserService service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var UserService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "UserService",
+	HandlerType: (*UserServiceServer)(nil),
+	Methods:     []grpc.MethodDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "GetUserScoreByStream",
+			Handler:       _UserService_GetUserScoreByStream_Handler,
+			ServerStreams: true,
+			ClientStreams: true,
+		},
+	},
+	Metadata: "service.proto",
+}

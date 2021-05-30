@@ -7,3 +7,7 @@ service ProdService {
   rpc UpdateProd(ProdRequest) returns (ProdResponse);
   rpc GetProdStream(ProdRequest) returns (stream ProdResponse);
 }
+
+service UserService {
+  rpc GetUserScoreByStream(stream UserScoreRequest) returns (stream UserScoreResponse);
+}

@@ -66,8 +66,10 @@ func RABC(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, hand
 
 func main() {
 	//grpc.UnaryInterceptor()拦截器
-	s := grpc.NewServer(grpc.UnaryInterceptor(RABC))
+	//s := grpc.NewServer(grpc.UnaryInterceptor(RABC))
+	s := grpc.NewServer()
 	pbfiles.RegisterProdServiceServer(s, services.NewProdService())
+	pbfiles.RegisterUserServiceServer(s, services.NewUserService())
 
 	listen, _ := net.Listen("tcp", ":8080")
 	if err := s.Serve(listen); err != nil {
